@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:BookWorm.Views.Controls"
+             BackgroundColor="Transparent"
+             x:Class="BookWorm.Views.ViewEditBookView">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="PopupFrame" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Padding" Value="0,0,0,0" />
+                <Setter Property="HasShadow" Value="True"/>
+                <Setter Property="Margin" Value="50,50,50,50" />
+            </Style>
+            <Style x:Key="PromptLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="5,5,5,0" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Start" />
+            </Style>
+            <Style x:Key="DataLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Margin" Value="5,0,10,0" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="IsVisible" Value="{Binding InViewMode}"/>
+            </Style>
+            <Style x:Key="DataEntry" TargetType="Entry">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Margin" Value="5,0,10,0" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="BackgroundColor" Value="LightGray"/>
+                <Setter Property="IsVisible" Value="{Binding InEditMode}"/>
+            </Style>
+            <Style x:Key="DataEditor" TargetType="Editor">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Margin" Value="5,0,10,0" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="Start" />
+                <Setter Property="MaximumHeightRequest" Value="200"/>
+                <Setter Property="BackgroundColor" Value="LightGray"/>
+                <Setter Property="IsVisible" Value="{Binding InEditMode}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding BackGroundCommand}"/>
+    </ContentView.GestureRecognizers>
+    <Grid Margin="10,10,10,10" BackgroundColor="Transparent">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Margin="5,5,5,5" BackgroundColor="White" Grid.Column="0" Grid.Row="0" 
+              VerticalOptions="Center" HorizontalOptions="Fill">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Image Source="{Binding LockedIcon}" IsVisible="{Binding LockedIconVisible}" Grid.Column="0" Grid.Row="0" Aspect="AspectFit" 
+                    Margin="5,5,5,5" VerticalOptions="Center" HorizontalOptions="Start">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding LockCommand}"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <VerticalStackLayout Grid.Column="0" Grid.Row="1">
+                <Label 
+                    Text="Title"
+                    Style="{StaticResource PromptLabel}" />
+                <Label 
+                    Text="{Binding Title}"
+                    Style="{StaticResource DataLabel}"/>
+                <Entry Text="{Binding Title}"
+                    Placeholder="Title"
+                    Style="{StaticResource DataEntry}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="0" Grid.Row="2">
+                <Label 
+                        Text="Author"
+                        Style="{StaticResource PromptLabel}" />
+                <Label 
+                        Text="{Binding Author}"
+                        Style="{StaticResource DataLabel}"/>
+                <Entry Text="{Binding Author}"
+                        Placeholder="Author"
+                    Style="{StaticResource DataEntry}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="0" Grid.Row="3">
+                <Label Text="Genre"
+                        Style="{StaticResource PromptLabel}" />
+                <Label Text="{Binding GenreText}"
+                        IsVisible="True"
+                        HeightRequest="40">
+                    <Label.Style>
+                        <Style TargetType="Label" BasedOn="{StaticResource DataLabel}">
+                            <Style.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding InEditMode}" Value="True">
+                                    <Setter Property="Background" Value="LightGray" />
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label" Binding="{Binding InEditMode}" Value="False">
+                                    <Setter Property="Background" Value="White" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GenreCommand}"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="0" Grid.Row="4">
+                <Label 
+                    Text="Published"
+                    Style="{StaticResource PromptLabel}" />
+                <Label 
+                    Text="{Binding Published}"
+                    Style="{StaticResource DataLabel}"/>
+                <Entry Text="{Binding Published}"
+                        Keyboard="Numeric"
+                        Placeholder="Published"
+                    Style="{StaticResource DataEntry}"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="0" Grid.Row="5">
+                <Label 
+                    Text="Description"
+                    Style="{StaticResource PromptLabel}" />
+                <Label 
+                    Text="{Binding Description}"
+                    Style="{StaticResource DataLabel}"
+                    VerticalOptions="FillAndExpand"/>
+                <Editor Text="{Binding Description}"
+                        Placeholder="Description"
+                        Style="{StaticResource DataEditor}"/>
+            </VerticalStackLayout>
+            <Image Source="cross.png" Grid.Column="0" Grid.Row="6" Aspect="AspectFit" HeightRequest="50"
+                Margin="5,5,5,5" VerticalOptions="Center" HorizontalOptions="Start">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseCommand}"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Source="check.png" IsVisible="{Binding InEditMode}" Grid.Column="0" Grid.Row="6" Aspect="AspectFit"  HeightRequest="50"
+                Margin="5,5,5,5" VerticalOptions="Center" HorizontalOptions="End">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SaveCommand}"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+        <controls:SelectGenre Grid.Column="0" Grid.Row="0" OnClose="{Binding OnSelectGenresClose}" 
+                              SelectedGenre="{Binding Genre}" IsVisible="{Binding SelectGenreVisible}" />
+    </Grid>
+</ContentView>

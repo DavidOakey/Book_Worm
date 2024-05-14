@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cells="clr-namespace:BookWorm.Views.Cells"
+             xmlns:views="clr-namespace:BookWorm.Views"
+             x:Class="BookWorm.Views.BookList"
+             Title="BookList">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="PopupFrame" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="Padding" Value="0,0,0,0" />
+                <Setter Property="HasShadow" Value="True"/>
+                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="Margin" Value="50,50,50,50" />
+            </Style>
+            <Style x:Key="MenuImage" TargetType="Image">
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Aspect" Value="AspectFit"/>
+                <Setter Property="Margin" Value="5,5,5,5" />
+                <Setter Property="HeightRequest" Value="50"/>
+            </Style>
+            <Style x:Key="MenuLabel" TargetType="Label">
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="5,5,5,5" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Margin="5,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Image Source="cog.png" Grid.Row="0" Grid.Column="0" Aspect="AspectFit"  Margin="5,5,5,5"
+                   HeightRequest="30" VerticalOptions="Center" HorizontalOptions="Center">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SettingsCommand}"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <Entry  Grid.Row="0" Grid.Column="1"
+            Text="{Binding SearchText}"
+                Placeholder="Search"
+                VerticalOptions="Center" 
+                HorizontalOptions="Fill" />
+        </Grid>
+        <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActiveBookList}" SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <cells:BookListCell/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Image Source="add.png" Grid.Row="2" Grid.Column="0" Margin="10,10,10,10"
+               VerticalOptions="Start" HorizontalOptions="Center">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding AddBookCommand}"/>
+            </Image.GestureRecognizers>
+        </Image>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="1"
+             BackgroundColor="#BB000000" IsVisible="{Binding ShowEditVisible}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ViewEditBookBackGroundCommand}"/>
+            </Grid.GestureRecognizers>
+            <views:ViewEditBookView BindingContext="{Binding CurrentBookData}" 
+                Grid.Row="0" Grid.Column="0"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="1"
+                        IsVisible="{Binding SettingsMenuVisible}" BackgroundColor="#BB000000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding BackGroundCommand}"/>
+            </Grid.GestureRecognizers>
+            <Frame Grid.Row="1" Grid.Column="1" 
+                 Style="{StaticResource PopupFrame}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="0" >
+                        <Image Source="delete.png" Style="{StaticResource MenuImage}" Margin="10,10,10,10" HeightRequest="50">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteAllBooksCommand}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label Text="DELETE ALL BOOKS" Style="{StaticResource MenuLabel}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteAllBooksCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" >
+                        <Image Source="info.png" Style="{StaticResource MenuImage}" Margin="10,10,10,10" HeightRequest="50">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AboutCommand}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label Text="About" Style="{StaticResource MenuLabel}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AboutCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Frame>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="1"
+                        IsVisible="{Binding BookMenuVisible}" BackgroundColor="#BB000000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding BackGroundCommand}"/>
+            </Grid.GestureRecognizers>
+            <Frame Grid.Row="1" Grid.Column="1" 
+                   Style="{StaticResource PopupFrame}">
+                <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                    <HorizontalStackLayout Grid.Row="0" Grid.Column="0"  Margin="10,10,10,10" HeightRequest="50">
+                    <Image Source="info.png" Style="{StaticResource MenuImage}">
+                        <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ViewBookCommand}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                        <Label Text="View Book" Style="{StaticResource MenuLabel}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ViewBookCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Grid.Row="1" Grid.Column="0" >
+                        <Image Source="delete.png" Style="{StaticResource MenuImage}"  Margin="10,10,10,10" HeightRequest="50">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteCommand}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label Text="Delete Book" Style="{StaticResource MenuLabel}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Frame>
+        </Grid>
+    </Grid>
+</ContentPage>
